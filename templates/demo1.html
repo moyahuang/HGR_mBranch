@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <link rel="stylesheet" href="/static/css/display.css">
+    <script src="/static/js/moment.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script src="/static/js/chartjs-plugin-streaming.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+</head>
+<body>
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space5">
+            <div class="layui-col-md10">
+                <div class="channels">
+                    <div class="layui-row">
+                        <div class="layui-col-md3"><canvas id="chart1"></canvas></div>
+                        <div class="layui-col-md3"><canvas id="chart2"></canvas></div>
+                        <div class="layui-col-md3"><canvas id="chart3"></canvas></div>
+                        <div class="layui-col-md3"><canvas id="chart4"></canvas></div>
+                    </div>
+                    <div class="layui-row">
+                            <div class="layui-col-md3"><canvas id="chart5"></canvas></div>
+                            <div class="layui-col-md3"><canvas id="chart6"></canvas></div>
+                            <div class="layui-col-md3"><canvas id="chart7"></canvas></div>
+                            <div class="layui-col-md3"><canvas id="chart8"></canvas></div>
+                        </div>
+                </div>
+            </div>
+            <div class="layui-col-md2 layui-bg-gray">
+                <!-- <label for="">Channels</label>
+                <div class="layui-row">
+                    <dib class="layui-col-md6">
+                            <div><input type="checkbox" id="cb1" checked="checked" onclick="checkboxOnClick(this, 1)"/><label for="cb1">1</label></div> 
+                            <div><input type="checkbox" id="cb2" checked="checked" onclick="checkboxOnClick(this, 2)"/><label for="cb2">2</label></div> 
+                            <div><input type="checkbox" id="cb3" checked="checked" onclick="checkboxOnClick(this, 3)"/><label for="cb3">3</label></div> 
+                            <div><input type="checkbox" id="cb4" checked="checked" onclick="checkboxOnClick(this, 4)"/><label for="cb4">4</label></div> 
+                    </dib>
+                    <dib class="layui-col-md6">
+                            <div><input type="checkbox" id="cb1" checked="checked" onclick="checkboxOnClick(this, 1)"/><label for="cb1">1</label></div> 
+                            <div><input type="checkbox" id="cb2" checked="checked" onclick="checkboxOnClick(this, 2)"/><label for="cb2">2</label></div> 
+                            <div><input type="checkbox" id="cb3" checked="checked" onclick="checkboxOnClick(this, 3)"/><label for="cb3">3</label></div> 
+                            <div><input type="checkbox" id="cb4" checked="checked" onclick="checkboxOnClick(this, 4)"/><label for="cb4">4</label></div> 
+                    </dib>
+                </div> -->
+                <div class="layui-row">
+                    <form class="layui-form">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">Channels</label>
+                            <div class="layui-input-block">
+                                <input type="checkbox" name="display[ch1]" title="Ch1" checked>
+                                <input type="checkbox" name="display[ch2]" title="Ch2" checked>
+                                <input type="checkbox" name="display[ch3]" title="Ch3" checked>
+                                <input type="checkbox" name="display[ch4]" title="Ch4" checked>
+                                <input type="checkbox" name="display[ch5]" title="Ch5" checked>
+                                <input type="checkbox" name="display[ch6]" title="Ch6" checked>
+                                <input type="checkbox" name="display[ch7]" title="Ch7" checked>
+                                <input type="checkbox" name="display[ch8]" title="Ch8" checked>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">Store data?</label>
+                            <div class="layui-input-block">
+                                <input type="checkbox" name="switch" lay-skin="switch" lay-filter="moya">
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- <div class="interface">
+                        <span id="isStoreOn">Stop</span><label for=""> storing data</label>
+                        <div class="switch">
+                            <input id="cmn-toggle-1" class="cmn-toggle cmn-toggle-round"  type="checkbox" onclick="onStoreData(this)">
+                            <label for="cmn-toggle-1"></label>
+                        </div>
+                    </div> -->
+                </div>        
+            </div>
+        </div>
+
+        <div class="layui-row layui-col-space15 layui-bg-gray">
+            <div class="layui-col-md5">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        Gesture 
+                    </div>
+                    <div class="layui-card-body">
+                        <div class="place-holder">
+                                <!-- <i class="layui-icon layui-icon-picture" style="font-size: 360px;"></i> -->
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md7">
+                <div class="layui-card">
+                        <div class="layui-card-header">
+                            Application 
+                        </div>
+                        <div class="layui-card-body">
+                            <div class="place-holder">
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script src="/static/layui/layui.js"></script>
+    <script>
+        layui.config({
+            debug: true,
+        })
+        layui.use(['form'], function(){
+            var form=layui.form;
+
+            form.render();
+
+            form.on('switch(filter', function(data){
+                console.log(data.value);
+            })
+        })
+    </script>
+    <script src="/static/js/demo1.js"></script>
+
+</body>
+</html>
