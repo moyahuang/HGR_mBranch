@@ -33,7 +33,7 @@ def temp_server(post_freq=1):
 
 def start_fpga_server(server_ip = "192.168.1.102", server_port = 8080,
                     client_ip = "192.168.1.100", client_port = 8080,
-                    post_freq = 1, data_path = "./temp/"):
+                    data_path = "./temp/"):
 
     """
     To start FPGA server to collect UDP package, and put the data into a global queue. 
@@ -72,7 +72,7 @@ def start_fpga_server(server_ip = "192.168.1.102", server_port = 8080,
             data_buffer2 += data
 
         # return data to front end
-        if count % int(32 / post_freq) == 0:
+        if count % 32 == 0:
             processed_data = processing_data(data_buffer1)
             print(processed_data.shape)
             put_into_queue(processed_data)
