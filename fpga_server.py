@@ -64,9 +64,11 @@ def start_fpga_server(server_ip = "192.168.1.102", server_port = 8080,
         # store data
         # data_buffer1 is used to return data to front end (count 1-second as one package)
         # data_buffer2 is used to write data (count 2-seconds as one frame)
-        if data_buffer1 is None:
+        if data_buffer1 is None and data_buffer2 is None:
             data_buffer1 = data
             data_buffer2 = data
+        elif data_buffer1 is None and data_buffer2 is not None:
+            data_buffer1 = data
         else:
             data_buffer1 += data
             data_buffer2 += data

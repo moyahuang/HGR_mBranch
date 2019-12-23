@@ -55,15 +55,15 @@ var timeoutIDs = [];
 function startFeed(index) {
     //因为布局暂时注释掉
     var receive = function() {
-        // getDataByInterval();
-        onReceive({
-            index: index,
-            timstamp: Date.now(),
-            value: randomScalingFactor()
-        });
-        timeoutIDs[index] = setTimeout(receive, 20);
+        getDataByInterval();
+        // onReceive({
+        //     index: index,
+        //     timstamp: Date.now(),
+        //     value: randomScalingFactor()
+        // });
+        timeoutIDs[index] = setTimeout(receive, 1000);
     }
-    timeoutIDs[index] = setTimeout(receive, 20);
+    timeoutIDs[index] = setTimeout(receive, 1000);
 
 }
 

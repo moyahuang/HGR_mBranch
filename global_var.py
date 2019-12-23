@@ -6,11 +6,13 @@ from keras.utils import to_categorical
 from keras.optimizers import Adam
 from keras.losses import categorical_crossentropy
 import numpy as np
+import tensorflow as tf
 
 def _init():
     global _global_queue
     global _switch
     global _model
+    global graph 
     _global_queue = Queue(maxsize=0)
     _switch = False
 
@@ -20,16 +22,17 @@ def _init():
     m = Dense(8, activation = "softmax")(m)
     _model = Model(input_layer, m)
     _model.load_weights("weights.74-0.9977.hdf5")
+    graph = tf.get_default_graph()
 
 def put_into_queue(value):
-    # _global_queue.put(value)
-    _global_queue.put_nowait(value)
+    _global_queue.put(value)
+    # _global_queue.put_nowait(value)
 
 def get_from_queue():
     global _global_queue
     try:
-        # return _global_queue.get()
-        return _global_queue.get_nowait()
+        return _global_queue.get()
+        # return _global_queue.get_nowait()
     except Exception as e:
         return None
 
@@ -51,6 +54,8 @@ def get_switch():
 
 def predict_label(input_data):
     global _model
-    return _model.predict(input_data)
+    global graph
+    with graph.as_default():
+        return _model.predict(input_data)
 
 _init()
