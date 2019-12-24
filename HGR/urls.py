@@ -19,11 +19,11 @@ from django.conf.urls import url
 from . import view
 
 urlpatterns = [
-    # url('display', view.display),
-    url('display', view.temp_display),
-    # url('query_data', view.query_data),
-    url('query_data', view.temp_query_data),
-    # url('^$', view.display),
+    url('display', view.display),
+    # url('display', view.temp_display),
+    url('query_data', view.query_data),
+    # url('query_data', view.temp_query_data),
+    url('^$', view.display),
     url('store_on', view.store_on),
     url('store_off', view.store_off)
 ]

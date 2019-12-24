@@ -33,7 +33,7 @@ def display(request):
     }
     fpga_server_thread = Thread(target=start_fpga_server, kwargs=args)
     fpga_server_thread.start()
-    return render(request, 'display.html')
+    return render(request, 'demo2.html')
 
 
 def query_data(request):

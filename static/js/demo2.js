@@ -55,12 +55,12 @@ var timeoutIDs = [];
 function startFeed(index) {
     //因为布局暂时注释掉
     var receive = function() {
-        // getDataByInterval();
-        onReceive({
-            index: index,
-            timstamp: Date.now(),
-            value: randomScalingFactor()
-        });
+        getDataByInterval();
+        // onReceive({
+        //     index: index,
+        //     timstamp: Date.now(),
+        //     value: randomScalingFactor()
+        // });
         timeoutIDs[index] = setTimeout(receive, 20);
     }
     timeoutIDs[index] = setTimeout(receive, 20);
@@ -226,7 +226,6 @@ function getDataByInterval() {
                         data: rawData[j]
                     });
                 }
-               
             }
         },
             
@@ -234,4 +233,39 @@ function getDataByInterval() {
             console.log("connection fail");
         }
     })
+}
+
+function onStoreData(isOn){
+    if(isOn){
+        $.ajax("/store_on",{
+            cache: false,
+            success: function(res){
+                if(PRINT_LOG){
+                    console.log("start storing data",res);
+                }
+                // $("#isStoreOn").html("开始");
+            },
+            error: function(res){
+                if(PRINT_LOG){
+                    console.log(res);
+                }
+            }
+        })
+    }else{
+        $.ajax("/store_off",{
+            cache: false,
+            success: function(res){
+                if(PRINT_LOG){
+                    console.log(res);
+                }
+                $("#isStoreOn").html("停止");
+            },
+            error: function(res){
+                if(PRINT_LOG){
+                    console.log("stop storing data",res);
+                }
+            }
+        });
+        $("#isStoreOn").html("停止");
+    }
 }
