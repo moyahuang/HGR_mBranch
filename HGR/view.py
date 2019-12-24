@@ -9,6 +9,7 @@ import numpy as np
 from fpga_server import start_fpga_server, temp_output, temp_server
 from multiprocessing import Process
 from threading import Thread
+import time
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
@@ -26,7 +27,7 @@ class NpEncoder(json.JSONEncoder):
 def display(request):
     global args
     args = {
-        "server_ip" : "192.168.1.102",
+        "server_ip" : "192.168.1.103",
         "server_port" : 8080,
         "client_ip" : "192.168.1.100", 
         "client_port" : 8080,
@@ -38,22 +39,36 @@ def display(request):
 
 def query_data(request):
     dic = {}
-    data = get_from_queue()
+    data = get_from_queue() # data.shape => (8, 2048)
+
+    print("data:", data)
 
     # sample the data for display
-    sampling_rate_for_display = 1
-    data_for_display = data[:,::sampling_rate_for_display]
+    sampling_interval_for_display = 1024
+    time_interval = 1 / 2048 * sampling_interval_for_display
+    data_for_display = data[:,::sampling_interval_for_display]
+    now_time = time.time()
+    temp_display_dic = []
+    for i in range(data_for_display.shape[0]):
+        _temp_dic = []
+        for j in range(data_for_display.shape[1]):
+            _temp_dic.append({
+                "x" : now_time + time_interval * j,
+                "y" : data_for_display[i][j]
+            })
+        temp_display_dic.append(_temp_dic)
+    dic["data"] = temp_display_dic
     
     # predict the label
-    data_for_predict = None
+    data_for_predict = data.T.reshape([-1, 128, 8])
     result = predict_label(data_for_predict)
+    result = np.argmax(result, axis=1)
+    print(result)
+    dic["label"] = result.tolist()
 
     # build return value
-    print(data.shape, get_queue_remainder())
-    dic["data"] = data.tolist()
-    print(data)
     json_dump = json.dumps(dic)
-    
+
     return JsonResponse(json_dump, safe=False)
 
 def temp_display(request):

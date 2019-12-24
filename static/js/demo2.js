@@ -61,9 +61,9 @@ function startFeed(index) {
         //     timstamp: Date.now(),
         //     value: randomScalingFactor()
         // });
-        timeoutIDs[index] = setTimeout(receive, 20);
+        timeoutIDs[index] = setTimeout(receive, 1000);
     }
-    timeoutIDs[index] = setTimeout(receive, 20);
+    timeoutIDs[index] = setTimeout(receive, 1000);
 
 }
 
