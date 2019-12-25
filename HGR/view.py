@@ -27,7 +27,7 @@ class NpEncoder(json.JSONEncoder):
 def display(request):
     global args
     args = {
-        "server_ip" : "192.168.1.103",
+        "server_ip" : "192.168.1.101",
         "server_port" : 8080,
         "client_ip" : "192.168.1.100", 
         "client_port" : 8080,
@@ -58,12 +58,13 @@ def query_data(request):
             })
         temp_display_dic.append(_temp_dic)
     dic["data"] = temp_display_dic
+    print("data", temp_display_dic)
     
     # predict the label
     data_for_predict = data.T.reshape([-1, 128, 8])
     result = predict_label(data_for_predict)
     result = np.argmax(result, axis=1)
-    print(result)
+    print("predicted result",result)
     dic["label"] = result.tolist()
 
     # build return value

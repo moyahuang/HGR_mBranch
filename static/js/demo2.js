@@ -41,8 +41,8 @@ function randomScalingFactor() {
 function onReceive(event) {
     // window.myChart.config.data.datasets[event.index].data.push(event.data);
     window.myChart.config.data.datasets[event.index].data.push({
-        x: event.timstamp,
-        y: event.value
+        x: Math.round(event.data.x*1000),
+        y: event.data.y
     });
 
     window.myChart.update({
@@ -213,13 +213,17 @@ function getDataByInterval() {
         dataType: "json",
         success: function(res) {
             res=JSON.parse(res);
-            if(PRINT_LOG){
-                console.log("res.data", res.data);
-            }
+            // if(PRINT_LOG){
+            //     console.log("res.data", res.data);
+            // }
+            //debug
+            // console.log("timestamp for channel one:",res.data[0]);
             for (var i = 0; i < 8; i++) {
+               
+                //res.data[i] stands for the channel one data
                 var rawData = res.data[i];
                 // debug用
-                console.log(rawData);
+                //rawData is an array of {'x': timestamp,'y': voltage}
                 for(var j=0; j<rawData.length; j++){
                     onReceive({
                         index: i,

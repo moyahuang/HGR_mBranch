@@ -1,2 +1,5 @@
 __pycache__
 temp/
+process_data.py
+test.py
+test_display.py
