@@ -5,7 +5,7 @@ import time
 import os
 import time
 from threading import Thread
-from global_var import put_into_queue, get_from_queue, get_queue_remainder, get_switch
+from global_var import put_into_queue, get_from_queue, get_queue_remainder, get_switch, predict_label
 
 def temp_server(post_freq=1):
     '''
@@ -95,6 +95,89 @@ def start_fpga_server(server_ip = "192.168.1.102", server_port = 8080,
                     print("write error")
             data_buffer2 = None
 
+def start_fpga_server_new(server_ip = "192.168.1.102", server_port = 8080,
+                        client_ip = "192.168.1.100", client_port = 8080,
+                        sampling_interval_for_display = 1024, data_path = "./temp/"):
+
+    """
+    To start FPGA server to collect UDP package, and put the data into a global queue. 
+    """
+
+    # initialize parameters
+    BUFSIZE = 2048
+    server_ip_port = (server_ip, server_port)
+    client_ip_port = (client_ip, client_port)
+    
+    # initialize server
+    server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    server.bind(server_ip_port)
+
+    # generate msg_start_sending to shake hand
+    msg_start_sending = "\x28\x00\x01\x00\x02\x01\xA0\x35\x00\x01\x02\x00\x00\x00\x01\x00\x00\x80\x00"
+
+    # send start message
+    print(server.sendto(msg_start_sending.encode("latin-1"), client_ip_port)) # latin-1 can avoid \xc2
+
+    count = 0
+    data_buffer = None
+    while True:
+        data, client_addr = server.recvfrom(BUFSIZE)
+        count += 1
+
+        # store data
+        # data_buffer1 is used to return data to front end (count 1-second as one package)
+        # data_buffer2 is used to write data (count 2-seconds as one frame)
+        if data_buffer is None:
+            data_buffer = data
+        else:
+            data_buffer += data
+
+        # write data
+        if count % 64 == 0:
+
+            # processe data
+            processed_data = processing_data(data_buffer)
+            print(processed_data.shape)
+
+            # generate time stamp
+            temp_dic = []
+            time_interval = 1 / 2048 * sampling_interval_for_display
+            data_for_display = processed_data[:,::sampling_interval_for_display]
+            now_time = time.time()
+            temp_display_dic = []
+            for i in range(data_for_display.shape[0]):
+                _temp_dic = []
+                for j in range(data_for_display.shape[1]):
+                    _temp_dic.append({
+                        "x" : now_time + time_interval * j,
+                        "y" : data_for_display[i][j]
+                    })
+                temp_display_dic.append(_temp_dic)
+            temp_dic["data"] = temp_display_dic
+
+            # predict the label
+            data_for_predict = processed_data.T.reshape([-1, 128, 8])
+            result = predict_label(data_for_predict)
+            result = np.argmax(result, axis=1)
+            print(result)
+            temp_dic["label"] = result.tolist()
+        
+            # put temp dic into queue
+            put_into_queue(temp_dic)
+
+            # judge if the writing switch is on
+            print("Writing switch:", get_switch())
+            if get_switch() == True:
+                try:
+                    f = open(os.path.join(data_path, str(time.time()) + ".txt"), "wb")
+                    f.write(data_buffer)
+                    f.close()
+                    print("write 1 frame")
+                except Exception as e:
+                    print("write error")
+
+            # clear data buffer
+            data_buffer = None
 
 def processing_data(raw_data):
 

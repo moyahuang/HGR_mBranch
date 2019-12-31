@@ -6,7 +6,7 @@ from global_var import store_off_switch, store_on_switch, get_switch
 import os
 import time
 import numpy as np
-from fpga_server import start_fpga_server, temp_output, temp_server
+from fpga_server import start_fpga_server_new, temp_output, temp_server
 from multiprocessing import Process
 from threading import Thread
 import time
@@ -32,7 +32,7 @@ def display(request):
         "client_ip" : "192.168.1.100", 
         "client_port" : 8080,
     }
-    fpga_server_thread = Thread(target=start_fpga_server, kwargs=args)
+    fpga_server_thread = Thread(target=start_fpga_server_new, kwargs=args)
     fpga_server_thread.start()
     return render(request, 'demo2.html')
 
