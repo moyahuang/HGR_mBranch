@@ -58,7 +58,7 @@
                                 <input type="checkbox" name="switch" lay-skin="switch" lay-filter="store">
                             </div>
                         </div>
-                        <div class="layui-form-item">
+                        <!-- <div class="layui-form-item">
                                 <label class="layui-form-label">Test only</label>
                                 <div class="layui-input-block">
                                     <div class="layui-btn-group">
@@ -68,7 +68,7 @@
                                         <button id="addData" type="button" class="layui-btn layui-btn-sm">add data</button>
                                     </div>
                                 </div>
-                        </div>
+                        </div> -->
                     </form>
                 </div>        
             </div>
@@ -81,8 +81,8 @@
                         Gesture 
                     </div>
                     <div class="layui-card-body">
-                        <div class="place-holder">
-                            <img src="/static/img/1.png" alt="gesture" width="300px" height="300px">
+                        <div id="gestureWrapper" class="place-holder">
+                            <img id="handGesture" src="/static/img/1.png" alt="gesture" width="300px" height="300px">
                                 <!-- <i class="layui-icon layui-icon-picture" style="font-size: 360px;"></i> -->
                         </div>
                         
@@ -129,7 +129,8 @@
 
             form.on('switch(store)', function(data){
                 var isOn=data.elem.checked;
-                  onStoreData(isOn);
+                console.log(isOn);
+                onStoreData(isOn);
             });
         });
     </script>

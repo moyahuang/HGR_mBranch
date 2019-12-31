@@ -18,7 +18,8 @@ var chartConfig = {
     postFreq: 2, // 每秒请求接口次数，
     min: 0, //y坐标最小值
     max: 2.5, //y坐标最大值
-    frameRate: 30
+    frameRate: 30,
+    feedInterval: 1000
 }
 var color = Chart.helpers.color;
 function lineBaseConfig(index){
@@ -53,17 +54,18 @@ function onReceive(event) {
 var timeoutIDs = [];
 
 function startFeed(index) {
+    timeoutIDs[index]=setInterval(getDataByInterval, chartConfig.feedInterval);
     //因为布局暂时注释掉
-    var receive = function() {
-        getDataByInterval();
-        // onReceive({
-        //     index: index,
-        //     timstamp: Date.now(),
-        //     value: randomScalingFactor()
-        // });
-        timeoutIDs[index] = setTimeout(receive, 1000);
-    }
-    timeoutIDs[index] = setTimeout(receive, 1000);
+    // var receive = function() {
+    //     getDataByInterval();
+    //     // onReceive({
+    //     //     index: index,
+    //     //     timstamp: Date.now(),
+    //     //     value: randomScalingFactor()
+    //     // });
+    //     timeoutIDs[index] = setTimeout(receive, 1000);
+    // }
+    // timeoutIDs[index] = setTimeout(receive, 1000);
 
 }
 
@@ -75,6 +77,7 @@ function showLine(index){
     config.data.datasets[index].borderColor=chartColors[Object.keys(chartColors)[index]];
 }
 function hideLine(index){
+    //todo;
     config.data.datasets[index].backgroundColor=color(chartColors[Object.keys(chartColors)[8]]).alpha(0.5).rgbString();
     config.data.datasets[index].borderColor=chartColors[Object.keys(chartColors)[8]];
 }
@@ -152,59 +155,59 @@ window.onload = function() {
     window.myChart = new Chart(ctx, config);
     window.myChart.canvas.parentNode.style.height = '450px';
     startFeed(0);
-    startFeed(1);
-    startFeed(2);
-    startFeed(3);
-    startFeed(4);
-    startFeed(5);
-    startFeed(6);
-    startFeed(7);
+    // startFeed(1);
+    // startFeed(2);
+    // startFeed(3);
+    // startFeed(4);
+    // startFeed(5);
+    // startFeed(6);
+    // startFeed(7);
 };
 
-document.getElementById('randomizeData').addEventListener('click', function() {
-    config.data.datasets.forEach(function(dataset) {
-        dataset.data.forEach(function(dataObj) {
-            dataObj.y = randomScalingFactor();
-        });
-    });
-    window.myChart.update();
-});
+// document.getElementById('randomizeData').addEventListener('click', function() {
+//     config.data.datasets.forEach(function(dataset) {
+//         dataset.data.forEach(function(dataObj) {
+//             dataObj.y = randomScalingFactor();
+//         });
+//     });
+//     window.myChart.update();
+// });
 
-var colorNames = Object.keys(chartColors);
-document.getElementById('addDataset').addEventListener('click', function() {
-    var colorName = colorNames[config.data.datasets.length % colorNames.length];
-    var newColor = chartColors[colorName];
-    var newDataset = {
-        label: 'Channel ' + (config.data.datasets.length + 1),
-        backgroundColor: color(newColor).alpha(0.5).rgbString(),
-        borderColor: newColor,
-        borderWidth: 1,
-        fill: false,
-        cubicInterpolationMode: 'monotone',
-        // lineTension: 0,
-        data: []
-    };
+// var colorNames = Object.keys(chartColors);
+// document.getElementById('addDataset').addEventListener('click', function() {
+//     var colorName = colorNames[config.data.datasets.length % colorNames.length];
+//     var newColor = chartColors[colorName];
+//     var newDataset = {
+//         label: 'Channel ' + (config.data.datasets.length + 1),
+//         backgroundColor: color(newColor).alpha(0.5).rgbString(),
+//         borderColor: newColor,
+//         borderWidth: 1,
+//         fill: false,
+//         cubicInterpolationMode: 'monotone',
+//         // lineTension: 0,
+//         data: []
+//     };
 
-    config.data.datasets.push(newDataset);
-    window.myChart.update();
-    startFeed(config.data.datasets.length - 1);
-});
+//     config.data.datasets.push(newDataset);
+//     window.myChart.update();
+//     startFeed(config.data.datasets.length - 1);
+// });
 
-document.getElementById('removeDataset').addEventListener('click', function() {
-    stopFeed(config.data.datasets.length - 1);
-    config.data.datasets.pop();
-    window.myChart.update();
-});
+// document.getElementById('removeDataset').addEventListener('click', function() {
+//     stopFeed(config.data.datasets.length - 1);
+//     config.data.datasets.pop();
+//     window.myChart.update();
+// });
 
-document.getElementById('addData').addEventListener('click', function() {
-    config.data.datasets.forEach(function(dataset) {
-        dataset.data.push({
-            x: Date.now(),
-            y: randomScalingFactor()
-        });
-    });
-    window.myChart.update();
-});
+// document.getElementById('addData').addEventListener('click', function() {
+//     config.data.datasets.forEach(function(dataset) {
+//         dataset.data.push({
+//             x: Date.now(),
+//             y: randomScalingFactor()
+//         });
+//     });
+//     window.myChart.update();
+// });
 
 function getDataByInterval() {
     //todo;
@@ -213,16 +216,47 @@ function getDataByInterval() {
         dataType: "json",
         success: function(res) {
             res=JSON.parse(res);
-            // if(PRINT_LOG){
-            //     console.log("res.data", res.data);
-            // }
-            //debug
-            // console.log("timestamp for channel one:",res.data[0]);
+            //label consists of 16 predicted result for 2s data
+            console.log("labels", res.label);
+            var labels=res.label;
+            var labelCounter=[0,0,0,0,0,0,0,0];
+            //将labels每8个数据为一个间隔分段进行计数
+            for(var j=0; j<labels.length/8; j++){
+                //1. 对每一部分的值频率进行统计
+                for(var i=j*8;i<(j+1)*8; i++){
+                    labelCounter[labels[i]]+=1;
+                }
+                //2. 找出频率最高的值并打印
+                var maxPos=0;
+                for(var i=1;i<8;i++){
+                    if(labelCounter[i]>labelCounter[maxPos]){
+                        maxPos=i;
+                    }
+                }
+                //todo;这里用于显示相应的手势结果在前端页面上
+                //若最大计数结果为0时 则显示无手势识别结果
+                if(labelCounter[maxPos]==0){
+                    console.log("label","None");
+                }
+                console.log("label:", maxPos);
+                var handImg=document.getElementById("handGesture");
+                var gestureWrapper=document.getElementById("gestureWrapper");
+                // gestureWrapper.innerHTML="<img src='/static/img/"+maxPos+".png?t="+Math.random()+"' alt='gesture' width='300px' height='300px'>";
+                // handImg.src="/static/img/"+maxPos+".png?t="+Math.random();
+                gestureWrapper.innerHTML="<h1>"+maxPos+"</h1>";
+                // return false;
+                //3. 重置频率计数器
+                labelCounter=[0,0,0,0,0,0,0,0];
+            }
+            
             for (var i = 0; i < 8; i++) {
                
                 //res.data[i] stands for the channel one data
                 var rawData = res.data[i];
                 // debug用
+                if(PRINT_LOG){
+                    console.log("channel"+i+":",rawData);
+                }
                 //rawData is an array of {'x': timestamp,'y': voltage}
                 for(var j=0; j<rawData.length; j++){
                     onReceive({

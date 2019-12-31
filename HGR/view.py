@@ -27,9 +27,9 @@ class NpEncoder(json.JSONEncoder):
 def display(request):
     global args
     args = {
-        "server_ip" : "192.168.1.101",
+        "server_ip" : "192.168.1.100",
         "server_port" : 8080,
-        "client_ip" : "192.168.1.100", 
+        "client_ip" : "192.168.1.101", 
         "client_port" : 8080,
     }
     fpga_server_thread = Thread(target=start_fpga_server_new, kwargs=args)
@@ -41,13 +41,15 @@ def query_data(request):
     dic = {}
     data = get_from_queue() # data.shape => (8, 2048)
 
-    print("data:", data)
+    # print("data:", data)
 
     # sample the data for display
     sampling_interval_for_display = 1024
     time_interval = 1 / 2048 * sampling_interval_for_display
     data_for_display = data[:,::sampling_interval_for_display]
     now_time = time.time()
+    print("data for display", data_for_display)
+    print(now_time)
     temp_display_dic = []
     for i in range(data_for_display.shape[0]):
         _temp_dic = []
