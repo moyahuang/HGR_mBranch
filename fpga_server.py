@@ -140,7 +140,7 @@ def start_fpga_server_new(server_ip = "192.168.1.102", server_port = 8080,
             print(processed_data.shape)
 
             # generate time stamp
-            temp_dic = []
+            temp_dic = {}
             time_interval = 1 / 2048 * sampling_interval_for_display
             data_for_display = processed_data[:,::sampling_interval_for_display]
             now_time = time.time()

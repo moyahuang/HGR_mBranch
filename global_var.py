@@ -20,13 +20,13 @@ def _init():
 
     # bulid RNN model
     input_layer = Input([128, 8])
-    m = LSTM(128)(input_layer)
+    m = GRU(128)(input_layer)
     m = Dense(8, activation = "softmax")(m)
     _model = Model(input_layer, m)
     sess = tf.Session()
     graph = tf.get_default_graph()
     set_session(sess)
-    _model.load_weights("weights.74-0.9977.hdf5")
+    _model.load_weights("weights.99-0.9933.hdf5")
     print(_model.summary())
 
 def put_into_queue(value):

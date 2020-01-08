@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>HGR DEMO</title>
     <link rel="stylesheet" href="/static/layui/css/layui.css">
     <link rel="stylesheet" href="/static/css/display.css">
+    <link rel="stylesheet" href="/static/css/normalize.css">
+    <link rel="stylesheet" href="/static/css/appstyle.css">
+
     <script src="/static/js/moment.js"></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script> -->
     <script src="/static/js/chart.js"></script>
@@ -21,24 +24,9 @@
                 <canvas id="myChart"></canvas>
             </div>
             <div class="layui-col-md3 layui-bg-gray" style="padding-top: 10px;">
-                <!-- <label for="">Channels</label>
-                <div class="layui-row">
-                    <dib class="layui-col-md6">
-                            <div><input type="checkbox" id="cb1" checked="checked" onclick="checkboxOnClick(this, 1)"/><label for="cb1">1</label></div> 
-                            <div><input type="checkbox" id="cb2" checked="checked" onclick="checkboxOnClick(this, 2)"/><label for="cb2">2</label></div> 
-                            <div><input type="checkbox" id="cb3" checked="checked" onclick="checkboxOnClick(this, 3)"/><label for="cb3">3</label></div> 
-                            <div><input type="checkbox" id="cb4" checked="checked" onclick="checkboxOnClick(this, 4)"/><label for="cb4">4</label></div> 
-                    </dib>
-                    <dib class="layui-col-md6">
-                            <div><input type="checkbox" id="cb1" checked="checked" onclick="checkboxOnClick(this, 1)"/><label for="cb1">1</label></div> 
-                            <div><input type="checkbox" id="cb2" checked="checked" onclick="checkboxOnClick(this, 2)"/><label for="cb2">2</label></div> 
-                            <div><input type="checkbox" id="cb3" checked="checked" onclick="checkboxOnClick(this, 3)"/><label for="cb3">3</label></div> 
-                            <div><input type="checkbox" id="cb4" checked="checked" onclick="checkboxOnClick(this, 4)"/><label for="cb4">4</label></div> 
-                    </dib>
-                </div> -->
                 <div class="layui-row">
                     <form class="layui-form">
-                        <div class="layui-form-item">
+                        <!-- <div class="layui-form-item">
                             <label class="layui-form-label">Channels</label>
                             <div class="layui-input-block">
                                 <input type="checkbox" name="display[ch1]" title="Ch1" lay-filter="channels" checked>
@@ -51,7 +39,7 @@
                                 <input type="checkbox" name="display[ch8]" title="Ch8" lay-filter="channels" checked>
                                 
                             </div>
-                        </div>
+                        </div> -->
                         <div class="layui-form-item">
                             <label class="layui-form-label">Store data?</label>
                             <div class="layui-input-block">
@@ -82,7 +70,14 @@
                     </div>
                     <div class="layui-card-body">
                         <div id="gestureWrapper" class="place-holder">
-                            <img id="handGesture" src="/static/img/1.png" alt="gesture" width="300px" height="300px">
+                            <img id="handGesture0" src="/static/img/0.png" alt="gesture" width="250px" height="300px">
+                            <img id="handGesture1" src="/static/img/1.png" alt="gesture" width="250px" height="300px">
+                            <img id="handGesture2" src="/static/img/2.png" alt="gesture" width="250px" height="300px">
+                            <img id="handGesture3" src="/static/img/3.png" alt="gesture" width="250px" height="300px">
+                            <img id="handGesture4" src="/static/img/4.png" alt="gesture" width="250px" height="300px">
+                            <img id="handGesture5" src="/static/img/5.png" alt="gesture" width="250px" height="300px">
+                            <img id="handGesture6" src="/static/img/6.png" alt="gesture" width="250px" height="300px">
+                            <img id="handGesture7" alt="gesture" width="250px" height="300px">
                                 <!-- <i class="layui-icon layui-icon-picture" style="font-size: 360px;"></i> -->
                         </div>
                         
@@ -90,15 +85,49 @@
                 </div>
             </div>
             <div class="layui-col-md7">
-                <div class="layui-card">
-                        <div class="layui-card-header">
-                            Application 
-                        </div>
-                        <div class="layui-card-body">
-                            <div class="place-holder">
-                            </div>
-                        </div>
-                    </div>
+               <div class="ia-container">
+                    <figure>
+                        <img src="/static/img/1.jpg" alt="image01" />
+                        <input id="radio1" type="radio" name="radio-set" checked="checked"/>
+                        <figcaption><span>True Colors</span></figcaption>
+                        
+                        <figure>
+                            <img src="/static/img/2.jpg" alt="image02" />
+                            <input id="radio2" type="radio" name="radio-set" />
+                            <figcaption><span>Honest Light</span></figcaption>
+                            
+                            <figure>
+                                <img src="/static/img/3.jpg" alt="image03" />
+                                <input id="radio3" type="radio" name="radio-set" />
+                                <figcaption><span>Silent Serenity</span></figcaption>
+                                
+                                <figure>
+                                    <img src="/static/img/4.jpg" alt="image04" />
+                                    <input id="radio4" type="radio" name="radio-set" />
+                                    <figcaption><span>Warm Welcome</span></figcaption>
+                                    
+                                    <figure>
+                                        <img src="/static/img/5.jpg" alt="image05" />
+                                        <input id="radio5" type="radio" name="radio-set" />
+                                        <figcaption><span>Sensible Magic</span></figcaption>
+                                        
+                                        <figure>
+                                            <img src="/static/img/6.jpg" alt="image06" />
+                                            <input id="ia-selector-last" type="radio" name="radio-set" />
+                                            <figcaption><span>Lovely Midnight</span></figcaption>
+                                
+                                        </figure>	
+                                            
+                                    </figure>	
+                                        
+                                </figure>
+                                    
+                            </figure>
+                            
+                        </figure>
+                        
+                    </figure>
+                </div>
             </div>
         </div>
     </div>
@@ -133,6 +162,41 @@
                 onStoreData(isOn);
             });
         });
+
+        $(document).keydown(function(event){
+            var e = event || window.event || arguments.callee.caller.arguments[0];
+            console.log(e.keyCode);
+            switch(e.keyCode){
+                case 50:$("#radio2").click();break;
+                case 51:$("#radio3").click();break;
+                case 52:$("#radio4").click();break;
+                case 49:$("#radio1").click();break;
+                case 53:$("#radio5").click();break;
+                case 54:$("#radio6").click();break;
+                case 55:$("#radio7").click();break;
+                case 56:$("#ia-selector-last").click();break;
+            }
+        })
+
+        $("#gestureWrapper img").not("#handGesture7").hide();
+
+        // $(document).keydown(function(event){
+        //     //0:48 1:49
+        //     switch(event.which){
+        //         case 48:changeImage(0);break;
+        //         case 49:changeImage(1); break;
+        //         case 50:changeImage(2);break;
+        //         case 51:changeImage(3); break;
+        //         case 52:changeImage(4);break;
+        //         case 53:changeImage(5); break;
+        //         case 54:changeImage(6); break;
+        //     }
+        //     // console.log(event.which);
+        // })
+
+        // function changeImage(number){
+        //     $("#handGesture").attr("src","/static/img/"+number+".png");
+        // }
     </script>
 
 </body>

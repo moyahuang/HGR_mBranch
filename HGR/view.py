@@ -27,9 +27,9 @@ class NpEncoder(json.JSONEncoder):
 def display(request):
     global args
     args = {
-        "server_ip" : "192.168.1.100",
+        "server_ip" : "192.168.1.101",
         "server_port" : 8080,
-        "client_ip" : "192.168.1.101", 
+        "client_ip" : "192.168.1.100", 
         "client_port" : 8080,
     }
     fpga_server_thread = Thread(target=start_fpga_server_new, kwargs=args)
@@ -72,6 +72,11 @@ def query_data(request):
     # build return value
     json_dump = json.dumps(dic)
 
+    return JsonResponse(json_dump, safe=False)
+
+def query_data_new(request):
+    temp_dic = get_from_queue()
+    json_dump = json.dumps(temp_dic)
     return JsonResponse(json_dump, safe=False)
 
 def temp_display(request):

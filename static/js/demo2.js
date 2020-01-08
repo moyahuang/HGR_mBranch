@@ -239,14 +239,33 @@ function getDataByInterval() {
                     console.log("label","None");
                 }
                 console.log("label:", maxPos);
-                var handImg=document.getElementById("handGesture");
-                var gestureWrapper=document.getElementById("gestureWrapper");
+                switch(maxPos){
+                    case 0:showImage(0);break;
+                    case 1:showImage(1);$("#radio1").click();break;
+                    case 2:showImage(2);$("#radio2").click();break;
+                    case 3:showImage(3);$("#radio3").click();break;
+                    case 4:showImage(4);$("#radio4").click();break;
+                    case 5:showImage(5);$("#radio5").click();break;
+                    case 6:showImage(6);$("#ia-selector-last").click();break;
+                }
+                // var handImg=document.getElementById("handGesture");
+                // var gestureWrapper=document.getElementById("gestureWrapper");
                 // gestureWrapper.innerHTML="<img src='/static/img/"+maxPos+".png?t="+Math.random()+"' alt='gesture' width='300px' height='300px'>";
                 // handImg.src="/static/img/"+maxPos+".png?t="+Math.random();
-                gestureWrapper.innerHTML="<h1>"+maxPos+"</h1>";
+                // gestureWrapper.innerHTML="<h1>"+maxPos+"</h1>";
                 // return false;
                 //3. 重置频率计数器
                 labelCounter=[0,0,0,0,0,0,0,0];
+            }
+
+            function showImage(num){
+                $("#gestureWrapper img").not("#handGesture"+num).hide();
+                $("#handGesture"+num).show();
+                // for(var i=0; i<document.querySelector("#gestureWrapper img").length; i++){
+                //     $("#gestureWrapper img")[i].hide();
+                //     $("#handGesture"+num).show();
+                // }
+               
             }
             
             for (var i = 0; i < 8; i++) {
